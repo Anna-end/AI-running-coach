@@ -1,0 +1,95 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+
+  profile     UserProfile?
+  plans       TrainingPlan[]
+  logs        WorkoutLog[]
+}
+
+model UserProfile {
+  id           String  @id @default(uuid())
+  age          Int
+  weightKg     Float
+  heightCm     Int?
+  goal         String
+  currentLevel String
+  weeklyDays   Int
+  sessionMin   Int?
+  injuries     String?
+  notes        String?
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model TrainingPlan {
+  id         String   @id @default(uuid())
+  version    Int      @default(1)
+  status     String   @default("active")
+  planData   Json
+  totalWeeks Int
+  summary    String?
+  createdAt  DateTime @default(now())
+
+  userId      String
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workouts    Workout[]
+  adaptations PlanAdaptation[]
+}
+
+model Workout {
+  id          String  @id @default(uuid())
+  weekNumber  Int
+  dayOfWeek   Int
+  workoutType String
+  description String
+  distanceKm  Float?
+  durationMin Int?
+  orderInPlan Int
+
+  planId String
+  plan   TrainingPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+  logs   WorkoutLog[]
+}
+
+model WorkoutLog {
+  id           String   @id @default(uuid())
+  status       String
+  rpe          String?
+  actualDistKm Float?
+  actualDurMin Int?
+  heartRateAvg Int?
+  notes        String?
+  loggedAt     DateTime @default(now())
+
+  workoutId String
+  workout   Workout @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model PlanAdaptation {
+  id           String   @id @default(uuid())
+  triggerCount Int
+  userFeedback String
+  aiResponse   Json
+  diffData     Json?
+  accepted     Boolean  @default(false)
+  createdAt    DateTime @default(now())
+
+  planId String
+  plan   TrainingPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+}
