@@ -1,0 +1,74 @@
+'use client'
+import { useState } from 'react'
+import { createClient } from '@/lib/supabase'
+import Image from "next/image"
+export default function RegisterPage() {
+  return (
+    <div className='min-h-screen bg-background flex'>
+      {/* Left Side - Hero Image */}
+      <div className='hidden lg:block lg:w-1/2 xl:w-3/5 relative'>
+        <Image 
+          src="/images/image.png"
+          alt="Runner"
+          fill
+          className="object-cover"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-background/80 via-background/20 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
+
+        {/* Motivational Text Overlay */}
+        <div className='absolute bottom-16 left-12 max-w-md'>
+          <h2 className="text-5xl xl:text-6xl font-bold text-foreground leading-tight tracking-tight">
+            RUN YOUR
+            <br />
+            <span className="text-accent">FASTEST</span>
+            <br />
+            MILE YET.
+          </h2>
+          <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
+            Join us and find the best path for yourself, track your progress, and improve yourself.
+          </p>
+        </div>
+      </div>
+      {/* Right Side - Registration Form */}
+      <div className="w-full lg:w-1/2 xl:w-2/5 flex flex-col justify-center px-8 md:px-16 lg:px-12 xl:px-20 py-12">
+        <div className="max-w-md mx-auto w-full">
+          
+          {/* Header */}
+          <div className="mb-10">
+            <h1 className="text-3xl md:text-4xl font-bold text-foreground tracking-tight">
+              Create Your Account
+            </h1>
+            <p className="mt-3 text-muted-foreground">
+              Start your journey. Track your runs. Beat your records.
+            </p>
+          </div>
+
+          {/* Registration Form */}
+          
+
+          {/* Footer Links */}
+          <div className="mt-12 pt-8 border-t border-border">
+            <div className="flex flex-wrap gap-4 text-xs text-muted-foreground uppercase tracking-wider">
+              <a href="#" className="hover:text-foreground transition-colors">Privacy Policy</a>
+              <a href="#" className="hover:text-foreground transition-colors">Terms of Service</a>
+              <a href="#" className="hover:text-foreground transition-colors">Help</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Hero Background */}
+      <div className="lg:hidden fixed inset-0 -z-10">
+        <Image
+          src="/images/runner-hero.jpg"
+          alt="Runner in motion"
+          fill
+          className="object-cover opacity-20"
+        />
+        <div className="absolute inset-0 bg-background/90" />
+      </div>
+    </div>
+  )
+}
