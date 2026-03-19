@@ -22,11 +22,3 @@ function Label({
 
 export { Label }
 
-function MyInput() {
-    return (
-        <div className='group'>
-            <label htmlFor=""
-            className='group group-data-[disabled="true]:opacity-50"'></label>
-        </div>
-    )
-}
