@@ -6,5 +6,5 @@ export default function RootPage() {
   // если нет → /login
   
   // пока просто редиректим на dashboard
-  redirect("/dashboard");
+  redirect("/login");
 }
