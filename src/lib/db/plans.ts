@@ -1,8 +1,9 @@
 import { createClient } from "@/lib/supabase/server";
-import { TrainingPlan } from "@/types";
+import { TrainingPlan } from "@/types/index";
 import { cookies } from "next/headers";
 
-export async function getActivePlan(userId: string) { 
+
+export async function getActivePlan(userId: string): Promise<TrainingPlan> { 
   const cookieStore = await cookies();
   const supabase = await createClient(cookieStore);
   const { data, error } = await supabase
@@ -17,9 +18,9 @@ export async function getActivePlan(userId: string) {
     .eq("is_active", true)
     .single();
 
-    if (error) {
-      return null;
-    }
+    //if (error) {
+      //return null;
+    //}
     return data;
 }
 
@@ -35,10 +36,10 @@ export async function createPlan(
     .insert({
       user_id: userId,
       goal: plan.goal,
-      fitness_level: plan.fitnessLevel,
-      start_date: plan.startDate,
-      end_date: plan.endDate,
-      total_weeks: plan.totalWeeks,
+      fitness_level: plan.fitness_level,
+      start_date: plan.start_date,
+      end_date: plan.end_date,
+      total_weeks: plan.total_weeks,
       is_active: true,
     })
     .select()

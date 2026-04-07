@@ -26,25 +26,31 @@ export interface PlanFormData {
 }
 
 export interface TrainingWeek {
-    weekNumber: number;
-    totalDistanceKm: number;
+    ai_notes: string;
+    created_at: string;
+    id: string;
+    plan_id: string; 
+    total_distance_km: number;
+    week_number: number;
     workouts: Workout[];
-    aiNotes?: string;
 }
 
 export interface Workout {
-    id: string;
-    date: string;
-    type: WorkoutType;
-    distanceKm: number;
-    durationMinutes: number;
-    description: string;
+    actual_distance_km? : number;
+    actual_duration_minutes?: number;
+    actual_pulse_work?: number;
     completed: boolean;
-    effortLevel? : EffortLevel;
-    actualDistanceKm?: number;
-    actualDurationMinutes?: number;
-    actualPulseWork?: number;
+    created_at: string;
+    date: string;
+    description: string;
+    distance_km: number;
+    duration_minutes: number;
+    effort_level? : EffortLevel;
+    id: string;
     notes?: string;
+    type: WorkoutType;
+    user_id: string;
+    week_id: string;
 }
 
 export interface AIPlanResponse {
@@ -54,16 +60,17 @@ export interface AIPlanResponse {
 }
 
 export interface TrainingPlan {
-    id: string;
-    userId: string;
+    ai_summary: string;
+    created_at: string;
+    end_date: string;
+    fitness_level: FitnessLevel;
     goal: Goal;
-    fitnessLevel: FitnessLevel;
-    startDate: string;
-    endDate: string;
-    totalWeeks: number;
-    weeks: TrainingWeek[];
-    createdAt: string;
-    isActive: boolean;
+    id: string;
+    is_active: boolean;
+    start_date: string;
+    total_weeks: number;
+    training_weeks: TrainingWeek[];
+    user_id: string;
   }
 
   export interface UserProfile {
@@ -79,4 +86,4 @@ export interface TrainingPlan {
 
   export type CreateWorkout = Omit<Workout, "id" | "completed" | "effortLevel">
   export type UpdateWorkout = Partial<Omit<Workout, "id">> & { id: string }
-  export type WorkoutPreview = Pick<Workout, "id" | "date" | "type" | "distanceKm" | "completed">
+  

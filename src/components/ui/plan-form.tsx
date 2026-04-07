@@ -8,6 +8,7 @@ import { Button } from "./Button"
 import { Input } from "./Input"
 import { Textarea } from "./textarea"
 import { Label } from "./label"
+import { savePlanAction } from "@/app/(app)/plan/new/actions";
 
 import {
     Select,
@@ -62,33 +63,51 @@ import {
   ]
   
   export function PlanForm() {
+    
     const [isLoading, setIsLoading] = useState(false)
     const [step, setStep] = useState(1)
+    const [error, setError] = useState<string | ''>('')
     const totalSteps = 3
   
     const form = useForm<PlanFormData>({
       resolver: zodResolver(PlanFormSchema),
       defaultValues: {
-        currentWeeklyKm: 0,
-        daysPerWeek: 3,
-        targetDate: "",
-        injuryHistory: "",
-        currentSleep: "average",
-        currentStress: "medium",
-        currentCaffeine: "sometimes",
-        currentAlcohol: "rarely",
-        currentSmoking: "never",
-        additionalInfo: "",
-      },
+      goal: "5km", // 👈 Добавьте значения по умолчанию для теста
+      fitnessLevel: "beginner",
+      currentWeeklyKm: 0,
+      daysPerWeek: 3,
+      targetDate: "",
+      injuryHistory: "",
+      currentSleep: "average",
+      currentStress: "medium",
+      currentCaffeine: "sometimes",
+      currentAlcohol: "rarely",
+      currentSmoking: "never",
+      additionalInfo: "",
+    },
+    mode: "onChange", // 👈 Добавьте режим валидации
     })
-  
-    const onSubmit = async (data: PlanFormData) => {
-      setIsLoading(true)
-      console.log("Plan form data:", data)
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      setIsLoading(false)
+  console.log('Form state:', {
+  isValid: form.formState.isValid,
+  errors: form.formState.errors,
+  values: form.getValues()
+});
+     const onSubmit = async (data: PlanFormData) => {
+    console.log('✅ Form submitted with data:', data);
+    setIsLoading(true);
+    setError('');
+    
+    try {
+      const result = await savePlanAction(data);
+      console.log('✅ Save result:', result);
+      // Тут можно сделать редирект
+      // router.push('/plan/success');
+    } catch (error) {
+      console.error('❌ Submit error:', error);
+      setError(error instanceof Error ? error.message : "Ошибка при создании плана");
+      setIsLoading(false);
     }
+  }
   
     const nextStep = () => {
       if (step < totalSteps) setStep(step + 1)
@@ -99,7 +118,9 @@ import {
     }
   
     return (
+      
       <div className="w-full max-w-2xl mx-auto">
+    
         {/* Progress indicator */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-2">
@@ -121,7 +142,10 @@ import {
         </div>
   
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form className="space-y-6"
+          onSubmit={form.handleSubmit(onSubmit)}
+          >
+            
             
             {/* Step 1: Goals and Fitness */}
             {step === 1 && (
@@ -245,7 +269,56 @@ import {
                     )}
                   />
                 </div>
+                    
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <FormField
+                    control={form.control}
+                    name="currentPulseRest"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm font-medium uppercase tracking-wider text-muted-foreground">
+                          Пульс в состоянии покоя
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            placeholder="0"
+                            {...field}
+                            onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                            className="h-14 bg-card border-border text-foreground placeholder:text-muted-foreground"
+                          />
+                        </FormControl>
+                        <FormDescription>ЧСС в обычной жизни</FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
   
+                  <FormField
+                    control={form.control}
+                    name="currentPulseWork"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm font-medium uppercase tracking-wider text-muted-foreground">
+                          Пульс во время средней по тяжести работы
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            min={20}
+                            max={260}
+                            placeholder="3"
+                            {...field}
+                            onChange={(e) => field.onChange(parseInt(e.target.value) || 1)}
+                            className="h-14 bg-card border-border text-foreground placeholder:text-muted-foreground"
+                          />
+                        </FormControl>
+                        <FormDescription>ЧСС при работе в целевом темпе</FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
                 <FormField
                   control={form.control}
                   name="targetDate"
@@ -542,6 +615,7 @@ import {
                 </Button>
               ) : (
                 <Button
+                  
                   type="submit"
                   disabled={isLoading}
                   className="flex-1 h-14 bg-accent text-accent-foreground hover:bg-accent/90 font-semibold uppercase tracking-wider text-sm group"
@@ -561,7 +635,13 @@ import {
                     </span>
                   )}
                 </Button>
+                
               )}
+                {error && (
+                <div className="p-3 rounded-sm bg-red-500/10 border border-red-500/50 text-red-500 text-sm text-center">
+                {error}
+                </div>
+                )}
             </div>
           </form>
         </Form>
