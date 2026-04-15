@@ -9,12 +9,13 @@ import { RegisterFormData, RegisterSchema } from "@/lib/validations/registerForm
 import {Label} from "@/components/ui/label";
 import { Button } from "@/components/ui/Button"
 import { Input } from "@/components/ui/Input"
-
+import {EmailConfirmPopup} from "@/components/auth/EmailConfirmation"
 export function RegisterForm() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [open, setOpen] = useState(false);
 
   const form = useForm<RegisterFormData>({
     resolver: zodResolver(RegisterSchema)
@@ -42,11 +43,11 @@ export function RegisterForm() {
       return
     }
 
-    router.push("/dashboard");
-    router.refresh();
+    setOpen(true)
   };
 
   return ( 
+     <>
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
       <div className="space-y-2">
         <Label htmlFor="name" className="text-sm font-medium uppercase 
@@ -106,14 +107,10 @@ export function RegisterForm() {
       </div>
 
         <div className="space-y-2">
-        <Label htmlFor="password" className="text-sm font-medium uppercase 
-        tracking-wider text-muted-foreground">
-          Повтори пароль
-        </Label>
         <Input
           id="password"
           type={showPassword ? "text" : "password"}
-          placeholder="Придумайте пароль"
+          placeholder="Повторите пароль"
           {...form.register("confirmPassword")}
           className="h-14 bg-card border-border text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary pr-12"
           required
@@ -159,10 +156,12 @@ export function RegisterForm() {
 
       <p className="text-center text-sm text-muted-foreground">
         Уже есть аккаунт?{" "}
-        <a href="#" className="text-foreground underline underline-offset-4 hover:text-accent transition-colors">
+        <a href="/login" className="text-foreground underline underline-offset-4 hover:text-accent transition-colors">
           Войти
         </a>
       </p>
-    </form>
+    </form> 
+    <EmailConfirmPopup open={open} onOpen={setOpen}></EmailConfirmPopup>
+   </>
   )
 }

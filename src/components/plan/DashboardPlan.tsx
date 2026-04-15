@@ -1,13 +1,13 @@
 "use client" 
 
 import {TrainingWeek} from "@/types/index"
-import { WorkoutCard } from "@/components/ui/WorkoutCard"
+import { WorkoutCard } from "@/components/plan/WorkoutCard"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/Card"
 type propsPlan = {
   weekPlan: TrainingWeek[]
 }
 
-export function Plan({weekPlan} : propsPlan) {
+export function DashboardPlan({weekPlan} : propsPlan) {
 
   const currentWeek = weekPlan[0];
   const upcomingWorkouts = currentWeek.workouts.filter(d => !d.completed);
@@ -22,7 +22,7 @@ export function Plan({weekPlan} : propsPlan) {
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">Dashboard</h1>
+        <h1 className="text-3xl font-bold tracking-tight text-foreground">Главная страница</h1>
         <p className="text-muted-foreground mt-1">Обзор вашего тренировочного прогресса</p>
       </div>
 
@@ -101,8 +101,10 @@ export function Plan({weekPlan} : propsPlan) {
         <div className="lg:col-span-2 space-y-6">
           {/* Upcoming Workouts */}
           <div>
+            <h2 className="text-3xl font-bold tracking-tight text-foreground">Недельный план</h2>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold tracking-tight text-foreground">Предстоящие тренировки</h2>
+              
+              <h2 className="text-muted-foreground mt-1">Предстоящие тренировки</h2>
               <button className="text-sm text-accent hover:underline uppercase tracking-wider font-medium">
                 Все
               </button>
@@ -117,10 +119,7 @@ export function Plan({weekPlan} : propsPlan) {
           {/* Completed Workouts */}
           <div>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold tracking-tight text-foreground">Завершенные</h2>
-              <button className="text-sm text-accent hover:underline uppercase tracking-wider font-medium">
-                История
-              </button>
+              <h2 className="text-muted-foreground mt-1">Завершенные</h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {completedWorkouts.map((workout) => (

@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { getActivePlan } from "@/lib/db/plans";
 import { cookies } from "next/headers";
-import { Plan } from "@/components/plan/PlanStats"
+import { DashboardPlan } from "@/components/plan/DashboardPlan"
 
 export default async function DashboardPage() {
   const cookieStore = await cookies();
@@ -46,7 +46,7 @@ export default async function DashboardPage() {
 
   return (
     <div>
-      <Plan weekPlan={plan.training_weeks}/>
+      <DashboardPlan weekPlan={plan.training_weeks}/>
     </div>
   );
 }

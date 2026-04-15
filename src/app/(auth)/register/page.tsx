@@ -1,16 +1,18 @@
 import { RegisterForm } from "@/components/auth/RegisterForm"
 import Image from "next/image"
+import runnerImage from '@/public/images/image.png'; 
 export default function RegisterFormRegisterPage() {
 return (
     <div className="min-h-screen bg-background flex">
       {/* Left Side - Hero Image */}
       <div className="hidden lg:block lg:w-1/2 xl:w-3/5 relative">
         <Image
-          src="/images/runner-hero.jpg"
+          src={runnerImage}
           alt="Runner in motion"
           fill
           className="object-cover"
           priority
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-background/80 via-background/20 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />

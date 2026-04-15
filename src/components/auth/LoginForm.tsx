@@ -112,7 +112,7 @@ export function LoginForm() {
 
       <p className="text-center text-sm text-muted-foreground">
         Нет аккаунта?{" "}
-        <a href="#" className="text-foreground underline underline-offset-4 hover:text-accent transition-colors">
+        <a href="/register" className="text-foreground underline underline-offset-4 hover:text-accent transition-colors">
           Зарегестрироваться
         </a>
       </p>
